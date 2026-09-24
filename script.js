@@ -1,5 +1,5 @@
 // --- Configuration ---
-const APPS_SCRIPT_URL = 'YOUR_WEB_APP_URL_HERE'; // Replace with your Apps Script URL
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxYNGynXBQJo3PERHuV8G97H7UDOMMjDJgJYZjzS3hkjABQmrCnwSz8TpotvEfiZVd5ew/exec'; // Replace with your Apps Script URL
 
 const btnYes = document.getElementById('btn-yes');
 const btnNo = document.getElementById('btn-no');
