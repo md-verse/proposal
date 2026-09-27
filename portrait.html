@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Masterpiece...</title>
+    <link rel="stylesheet" href="portrait.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Montserrat:wght@300&display=swap" rel="stylesheet">
+</head>
+<body>
+    <canvas id="particle-canvas"></canvas>
+    
+    <main class="ui-layer" id="proposal-box">
+        <div class="content-fade-in delay-long">
+            <h1 class="elegant-title">You are art.</h1>
+            <p class="subtitle">Will you be my girlfriend?</p>
+            
+            <div class="actions">
+                <button id="btn-yes">Yes</button>
+                <button id="btn-no">No</button>
+            </div>
+        </div>
+    </main>
+
+    <section class="ui-layer hidden" id="success-box">
+        <h1 class="elegant-title gold-glow">My masterpiece is complete. ✨</h1>
+    </section>
+
+    <!-- Hidden image source for the particle engine to read -->
+    <img id="source-image" src="portrait.jpg" style="display: none;" crossorigin="anonymous">
+
+    <script src="portrait.js"></script>
+</body>
+</html>
