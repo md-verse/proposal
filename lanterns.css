@@ -1,0 +1,139 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    /* Deep twilight sky transitioning into a water reflection */
+    background: linear-gradient(to bottom, #0a1128 0%, #1c2541 60%, #0b132b 100%);
+    font-family: 'Lato', sans-serif;
+    color: #ffffff;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.proposal-container {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    max-width: 600px;
+    padding: 40px;
+}
+
+.calligraphy {
+    font-family: 'Great Vibes', cursive;
+    font-size: 4.5rem;
+    font-weight: 400;
+    color: #ffeba1;
+    text-shadow: 0 0 20px rgba(255, 235, 161, 0.6);
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+}
+
+.subtitle {
+    font-size: 1.3rem;
+    font-weight: 300;
+    color: #d8e2dc;
+    margin-bottom: 50px;
+    letter-spacing: 1px;
+}
+
+.actions {
+    position: relative;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+button {
+    font-family: 'Lato', sans-serif;
+    padding: 15px 40px;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.5s ease;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+#btn-yes {
+    background: rgba(255, 235, 161, 0.1);
+    color: #ffeba1;
+    border: 1px solid #ffeba1;
+    box-shadow: 0 0 15px rgba(255, 235, 161, 0.2), inset 0 0 10px rgba(255, 235, 161, 0.1);
+    backdrop-filter: blur(5px);
+    z-index: 2;
+}
+
+#btn-yes:hover {
+    background: #ffeba1;
+    color: #0a1128;
+    box-shadow: 0 0 30px rgba(255, 235, 161, 0.8);
+    transform: translateY(-3px);
+}
+
+#btn-no {
+    background: transparent;
+    color: #6b7a8f;
+    border: 1px solid transparent;
+    position: absolute;
+    margin-left: 220px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.success-screen {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+}
+
+.gold-glow {
+    font-size: 5.5rem;
+    animation: pulseGlow 3s infinite alternate;
+}
+
+/* Animations */
+.fade-in {
+    opacity: 0;
+    animation: slowFadeIn 2s ease-in-out forwards;
+}
+
+.reveal-up {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: revealUpwards 2s ease-out forwards;
+}
+
+.delay-1 { animation-delay: 1.5s; }
+.delay-2 { animation-delay: 3s; }
+
+@keyframes slowFadeIn {
+    to { opacity: 1; }
+}
+
+@keyframes revealUpwards {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseGlow {
+    from { text-shadow: 0 0 20px rgba(255, 235, 161, 0.6); }
+    to { text-shadow: 0 0 40px rgba(255, 235, 161, 1), 0 0 80px rgba(255, 215, 0, 0.6); }
+}
