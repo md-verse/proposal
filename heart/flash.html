@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thunder Heart Timer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        'pitch-black': '#000000',
+                        'electric-blue': '#88ccff',
+                        'pure-white': '#ffffff'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #000000; /* Absolute pitch black */
+            color: #ffffff;
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.5s ease;
+        }
+
+        /* Minimal Input Styling */
+        input[type="number"]::-webkit-inner-spin-button, 
+        input[type="number"]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+        
+        .time-input {
+            background: transparent;
+            border: 1px solid #333333;
+            color: #aaaaaa;
+            transition: all 0.3s ease;
+        }
+        
+        .time-input:focus {
+            outline: none;
+            border-color: #880000;
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.2);
+        }
+
+        /* Controls container fade transition */
+        .controls-wrapper {
+            transition: opacity 1.5s ease-in-out, transform 1.5s ease-in-out;
+            opacity: 1;
+        }
+
+        .controls-hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.95);
+        }
+
+        /* 3D Heart Base State - Invisible */
+        .thunder-heart {
+            opacity: 0;
+            transform-origin: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            pointer-events: none; 
+        }
+
+        /* Background Flash Animation */
+        .bg-flash {
+            animation: skyFlash 2.5s linear forwards;
+        }
+
+        @keyframes skyFlash {
+            0% { background-color: #000000; }
+            2% { background-color: #3a0000; } /* Sharp red/black illumination */
+            4% { background-color: #000000; }
+            6% { background-color: #220000; }
+            8% { background-color: #000000; }
+            26% { background-color: #1a0000; }
+            28% { background-color: #000000; }
+            50% { background-color: #440000; }
+            54% { background-color: #000000; }
+            100% { background-color: #000000; }
+        }
+
+        /* 3D Lightning Strike Animation */
+        .is-striking {
+            animation: violentLightning3D 2.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        @keyframes violentLightning3D {
+            0% { 
+                opacity: 0; 
+                transform: translate(-50%, -50%) scale(0.8); 
+                filter: brightness(1) drop-shadow(0 0 0px #ff0000);
+            }
+            2% { 
+                opacity: 1; 
+                transform: translate(-50%, -50%) scale(1.4); 
+                /* Intense brightness, contrast, and layered red glows */
+                filter: brightness(2.5) contrast(1.3) drop-shadow(0 0 40px #ff6666) drop-shadow(0 0 120px #ff0000) drop-shadow(0 0 200px #aa0000); 
+            }
+            4% { 
+                opacity: 0; 
+            }
+            6% { 
+                opacity: 1; 
+                transform: translate(-50%, -50%) scale(1.5); 
+                filter: brightness(3) contrast(1.4) drop-shadow(0 0 60px #ffffff) drop-shadow(0 0 180px #ff0000); 
+            }
+            8% { 
+                opacity: 0; 
+                transform: translate(-50%, -50%) scale(1.1); 
+            }
+            12% { 
+                opacity: 0.9; 
+                transform: translate(-50%, -50%) scale(1.25); 
+                filter: brightness(1.8) drop-shadow(0 0 50px #cc0000); 
+            }
+            14% { 
+                opacity: 0; 
+            }
+            25% { 
+                opacity: 0; 
+            }
+            26% { 
+                opacity: 1; 
+                transform: translate(-50%, -50%) scale(1.6); 
+                filter: brightness(3.5) contrast(1.5) drop-shadow(0 0 80px #ffffff) drop-shadow(0 0 220px #ff0000) blur(1px); 
+            }
+            28% { 
+                opacity: 0; 
+            }
+            45% { 
+                opacity: 0; 
+            }
+            46% { 
+                opacity: 0.8; 
+                transform: translate(-50%, -50%) scale(1.35); 
+                filter: brightness(1.5) drop-shadow(0 0 40px #ff0000); 
+            }
+            48% { 
+                opacity: 0; 
+            }
+            50% { 
+                opacity: 1; 
+                transform: translate(-50%, -50%) scale(1.45); 
+                filter: brightness(2.2) drop-shadow(0 0 60px #ff6666) drop-shadow(0 0 140px #ff0000); 
+            }
+            54% { 
+                opacity: 0; 
+                transform: translate(-50%, -50%) scale(1); 
+            }
+            100% { 
+                opacity: 0; 
+                transform: translate(-50%, -50%) scale(0.8); 
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-pitch-black">
+
+    <!-- The Lightning Heart (Hidden initially) -->
+    <svg id="heart-svg" class="thunder-heart w-64 h-64 md:w-96 md:h-96" viewBox="0 0 24 24">
+        <defs>
+            <!-- Radial gradient simulating a 3D spherical light source from the top-left -->
+            <radialGradient id="heart3DGradient" cx="30%" cy="30%" r="70%">
+                <stop offset="0%" stop-color="#ffcccc" />   <!-- Specular Highlight -->
+                <stop offset="15%" stop-color="#ff3333" />  <!-- Base Bright Red -->
+                <stop offset="60%" stop-color="#990000" />  <!-- Mid Shadow -->
+                <stop offset="90%" stop-color="#330000" />  <!-- Deep Shadow -->
+                <stop offset="100%" stop-color="#110000" /> <!-- Core Dark Edge -->
+            </radialGradient>
+        </defs>
+        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" 
+              fill="url(#heart3DGradient)"/>
+    </svg>
+
+    <!-- Controls Container -->
+    <main id="controls" class="controls-wrapper flex flex-col items-center z-10 p-8 rounded-3xl border border-[#111111] bg-[#030303] shadow-[0_0_50px_rgba(0,0,0,0.8)]">
+        <h1 class="text-sm font-light text-[#555555] mb-8 tracking-[0.2em] uppercase">Void Timer</h1>
+
+        <div class="flex items-center justify-center gap-4 mb-10">
+            <!-- Minutes Input -->
+            <div class="flex flex-col items-center">
+                <input type="number" id="min-input" min="0" max="99" placeholder="00" 
+                    class="time-input w-24 h-28 text-center text-6xl font-light rounded-2xl pb-2"
+                >
+                <span class="text-[#444444] mt-3 text-xs tracking-widest uppercase">Min</span>
+            </div>
+
+            <span class="text-4xl text-[#333333] mb-6">:</span>
+
+            <!-- Seconds Input -->
+            <div class="flex flex-col items-center">
+                <input type="number" id="sec-input" min="0" max="59" placeholder="10" 
+                    class="time-input w-24 h-28 text-center text-6xl font-light rounded-2xl pb-2"
+                >
+                <span class="text-[#444444] mt-3 text-xs tracking-widest uppercase">Sec</span>
+            </div>
+        </div>
+
+        <!-- Start Button -->
+        <button id="start-btn" class="w-full bg-transparent hover:bg-[#1a0505] text-[#888888] hover:text-[#ff4444] border border-[#222222] hover:border-[#661111] font-light tracking-wider py-4 px-8 rounded-xl transition-all duration-300">
+            INITIATE
+        </button>
+    </main>
+
+    <script>
+        const controls = document.getElementById('controls');
+        const minInput = document.getElementById('min-input');
+        const secInput = document.getElementById('sec-input');
+        const startBtn = document.getElementById('start-btn');
+        const heartSvg = document.getElementById('heart-svg');
+
+        let timerTimeout;
+
+        function triggerLightning() {
+            // Trigger both the heart CSS animation and the background ambient flash
+            heartSvg.classList.add('is-striking');
+            document.body.classList.add('bg-flash');
+
+            // The animation lasts 2.5s. Wait 3.5s to leave a moment of silence in the void 
+            // before fading the controls back in.
+            setTimeout(() => {
+                heartSvg.classList.remove('is-striking');
+                document.body.classList.remove('bg-flash');
+                
+                // Fade controls back in
+                controls.classList.remove('controls-hidden');
+            }, 3500);
+        }
+
+        function startTimer() {
+            let m = parseInt(minInput.value) || 0;
+            let s = parseInt(secInput.value) || 0;
+
+            // Default to 10 seconds if both are empty/0
+            if (m === 0 && s === 0) {
+                if (minInput.value === "" && secInput.value === "") {
+                    s = 10;
+                    secInput.value = "10";
+                } else {
+                    // Invalid explicit 0,0 state, briefly flash inputs red
+                    minInput.style.borderColor = '#ff0000';
+                    secInput.style.borderColor = '#ff0000';
+                    setTimeout(() => {
+                        minInput.style.borderColor = '';
+                        secInput.style.borderColor = '';
+                    }, 500);
+                    return;
+                }
+            }
+
+            const totalMs = (m * 60 + s) * 1000;
+
+            // Fade out into the void
+            controls.classList.add('controls-hidden');
+
+            // Clear any existing timeouts to prevent multiple triggers
+            clearTimeout(timerTimeout);
+
+            // Wait for the timer to finish in the absolute dark
+            timerTimeout = setTimeout(() => {
+                triggerLightning();
+            }, totalMs);
+        }
+
+        // Event Listeners
+        startBtn.addEventListener('click', startTimer);
+
+        // Allow starting with Enter key
+        const inputs = [minInput, secInput];
+        inputs.forEach(input => {
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') startTimer();
+            });
+            
+            // Auto-format constraints to max 2 digits
+            input.addEventListener('input', (e) => {
+                if(e.target.value.length > 2) {
+                    e.target.value = e.target.value.slice(0, 2);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
